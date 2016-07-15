@@ -2,6 +2,8 @@
 require('jquery');
 require('bootstrap-webpack');
 
+var Item = require('./ItemClass.js')
+
 // Dependencies that actually get used.
 var React = require('react');
 var ReactDOM = require('react-dom');
@@ -21,7 +23,8 @@ var Button = rBootstrap.Button;
 
 var ToDoInput = React.createClass({
     alertClick: function() {
-        alert('Test!');
+        var test = new Item('test');
+        console.log(test);
     },
     render: function () {
         return (
@@ -64,7 +67,7 @@ var Page = React.createClass({
             </div>
         );
     }
-})
+});
 
 ReactDOM.render(
     React.createElement(Page, null),
