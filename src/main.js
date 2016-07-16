@@ -20,6 +20,14 @@ var FormGroup = rBootstrap.FormGroup;
 var InputGroup = rBootstrap.InputGroup;
 var FormControl = rBootstrap.FormControl;
 var Button = rBootstrap.Button;
+var Checkbox = rBootstrap.Checkbox;
+
+// Bootstrap List Group
+var ListGroup = rBootstrap.ListGroup;
+var ListGroupItem = rBootstrap.ListGroupItem;
+
+// Bootstrap Fade
+var Fade = rBootstrap.Fade;
 
 var todoList = [];
 
@@ -34,6 +42,7 @@ var ToDoInput = React.createClass({
         e.preventDefault();
         todoList.push(new Item(this.state.text.trim()));
         this.setState({text: ''});
+        this.props.onToDoSubmit();
         console.log(todoList)
     },
     render: function () {
@@ -52,14 +61,54 @@ var ToDoInput = React.createClass({
     }
 });
 
+var setFinished = function (i, data) {
+    data[i].changeState();
+    this.props.onItemUpdate();
+    console.log(data[i]);
+};
+
+var ToDoList = React.createClass({
+    test: function() {
+        console.log('changed');
+    },
+    render: function() {
+        var self = this;
+        var listItems = self.props.data.map(function(item, i){
+            return (
+                <ListGroupItem key={i} bsStyle={(item.finished ? 'success' : 'info')} onChange={self.test} onClick={setFinished.bind(self, i, self.props.data)}>
+                    <Checkbox inline checked={item.finished}>
+                        {item.description}
+                    </Checkbox>
+                </ListGroupItem>
+            )
+        });
+        return (
+            <ListGroup>
+                {listItems}
+            </ListGroup>
+        );
+    }
+});
+
 var FormContainer = React.createClass({
+    getInitialState: function() {
+        return { data: []};
+    },
+    handleDataChange: function() {
+        this.setState({data: todoList})
+    },
     render: function () {
         return (
             <div>
                 <Grid>
                     <Row>
                         <Col xs={6} xsOffset={3}>
-                            <ToDoInput></ToDoInput>
+                            <ToDoInput onToDoSubmit={this.handleDataChange}></ToDoInput>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={6} xsOffset={3}>
+                            <ToDoList data={this.state.data} onItemUpdate={this.handleDataChange}></ToDoList>
                         </Col>
                     </Row>
                 </Grid>
