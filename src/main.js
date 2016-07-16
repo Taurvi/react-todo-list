@@ -26,31 +26,34 @@ var Checkbox = rBootstrap.Checkbox;
 var ListGroup = rBootstrap.ListGroup;
 var ListGroupItem = rBootstrap.ListGroupItem;
 
-// Bootstrap Fade
-var Fade = rBootstrap.Fade;
-
+// Stores the ToDo list.
 var todoList = [];
 
 var ToDoInput = React.createClass({
     getInitialState: function() {
+        // Initial box is empty.
         return {text: ''};
     },
     handleTextChange: function(e) {
+        // When input text changes, set the state "Text" to the current value of the input
         this.setState({text: e.target.value});
     },
     handleSubmit: function(e) {
+        // Prevents default form actions.
         e.preventDefault();
+        // Creates new Item and stores to the todo list.
         todoList.push(new Item(this.state.text.trim()));
+        // Resets text state to empty
         this.setState({text: ''});
+        // Triggers update of the ToDo List
         this.props.onToDoSubmit();
-        console.log(todoList)
     },
     render: function () {
         return (
             <Form onSubmit={this.handleSubmit}>
                 <FormGroup>
                     <InputGroup>
-                        <FormControl type="text" value={this.state.text} onChange={this.handleTextChange}></FormControl>
+                        <FormControl type="text" value={this.state.text} onChange={this.handleTextChange} placeholder="Enter your task here"></FormControl>
                         <InputGroup.Button>
                             <Button bsStyle="success" type="submit">Submit</Button>
                         </InputGroup.Button>
@@ -61,21 +64,26 @@ var ToDoInput = React.createClass({
     }
 });
 
-var setFinished = function (i, data) {
-    data[i].changeState();
+/**
+ * Need to figure how to move this into a component
+ * @param i {number} - current item position in array
+ */
+var setFinished = function (i) {
+    this.props.data[i].changeState();
     this.props.onItemUpdate();
-    console.log(data[i]);
 };
 
 var ToDoList = React.createClass({
-    test: function() {
-        console.log('changed');
-    },
     render: function() {
+        // Self referencing variable
         var self = this;
+        // Iterate through the ToDo list
         var listItems = self.props.data.map(function(item, i){
             return (
-                <ListGroupItem key={i} bsStyle={(item.finished ? 'success' : 'info')} onChange={self.test} onClick={setFinished.bind(self, i, self.props.data)}>
+                // Set style to "success" if to-do item has been completed, else "info"
+                // On click, passes the self reference, the current array position, and the data object
+                // If item is "finished", checkbox should be checked.
+                <ListGroupItem key={i} bsStyle={(item.finished ? 'success' : 'info')} onClick={setFinished.bind(self, i)}>
                     <Checkbox inline checked={item.finished}>
                         {item.description}
                     </Checkbox>
@@ -92,9 +100,11 @@ var ToDoList = React.createClass({
 
 var FormContainer = React.createClass({
     getInitialState: function() {
+        // Sets initial data to an empty array
         return { data: []};
     },
     handleDataChange: function() {
+        // On data change, set data to equal the todoList.
         this.setState({data: todoList})
     },
     render: function () {
@@ -117,6 +127,7 @@ var FormContainer = React.createClass({
     }
 });
 
+// Renders page
 var Page = React.createClass({
     render: function () {
         return (
