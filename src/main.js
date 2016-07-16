@@ -21,19 +21,29 @@ var InputGroup = rBootstrap.InputGroup;
 var FormControl = rBootstrap.FormControl;
 var Button = rBootstrap.Button;
 
+var todoList = [];
+
 var ToDoInput = React.createClass({
-    alertClick: function() {
-        var test = new Item('test');
-        console.log(test);
+    getInitialState: function() {
+        return {text: ''};
+    },
+    handleTextChange: function(e) {
+        this.setState({text: e.target.value});
+    },
+    handleSubmit: function(e) {
+        e.preventDefault();
+        todoList.push(new Item(this.state.text.trim()));
+        this.setState({text: ''});
+        console.log(todoList)
     },
     render: function () {
         return (
-            <Form>
+            <Form onSubmit={this.handleSubmit}>
                 <FormGroup>
                     <InputGroup>
-                        <FormControl type="text"></FormControl>
+                        <FormControl type="text" value={this.state.text} onChange={this.handleTextChange}></FormControl>
                         <InputGroup.Button>
-                            <Button bsStyle="success" onClick={this.alertClick}>Submit</Button>
+                            <Button bsStyle="success" type="submit">Submit</Button>
                         </InputGroup.Button>
                     </InputGroup>
                 </FormGroup>

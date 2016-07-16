@@ -1,8 +1,3 @@
-/** @protected {String} - Contains a description of the item. */
-var _desc;
-/** @protected {boolean} - Status of the item. */
-var _status;
-
 /**
  * Contains information for a to-do list item.
  * @param desc {String} - Describes the item.
@@ -29,7 +24,7 @@ var _setDesc = function(self, setDesc) {
     } else if (typeof setDesc !== "string") {
         throw new Error("Description must be a String.");
     } else {
-        _desc = setDesc;
+        self._desc = setDesc;
     }
 }
 
@@ -42,11 +37,11 @@ var _setDesc = function(self, setDesc) {
  */
 var _setState = function(self, setState) {
     if (!setState) {
-        _status = false;
+        self._status = false;
     } else if (typeof setState !== "boolean") {
         throw new Error("State must be a boolean.");
     } else {
-        _status = self.status = setState;
+        self._status = setState;
     }
 }
 
@@ -59,12 +54,12 @@ var _i = Item.prototype;
 Object.defineProperties(_i, {
     description: {
         get: function() {
-            return _desc;
+            return this._desc;
         }
     },
     finished: {
         get: function() {
-            return _status;
+            return this._status;
         },
         set: function(newState) {
             _setState(this, newState);
