@@ -2,6 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
+    devtool: 'cheap-module-source-map',
     entry: [
         'babel-polyfill',
         './src/main',
@@ -10,6 +11,13 @@ module.exports = {
         path: path.resolve(__dirname, "public/shared"),
         filename: 'compiled.js'
     },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify('production')
+            }
+        })
+    ],
     module: {
         loaders: [
             {

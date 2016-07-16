@@ -80,10 +80,10 @@ var ToDoList = React.createClass({
         // Iterate through the ToDo list
         var listItems = self.props.data.map(function(item, i){
             return (
-                // Set style to "success" if to-do item has been completed, else "info"
+                // Set style to "success" if to-do item has been completed, else nothing
                 // On click, passes the self reference, the current array position, and the data object
                 // If item is "finished", checkbox should be checked.
-                <ListGroupItem key={i} bsStyle={(item.finished ? 'success' : 'info')} onClick={setFinished.bind(self, i)}>
+                <ListGroupItem key={i} bsStyle={(item.finished ? 'success' : '')} onClick={setFinished.bind(self, i)}>
                     <Checkbox inline checked={item.finished}>
                         {item.description}
                     </Checkbox>
